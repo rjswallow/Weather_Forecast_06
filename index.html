@@ -12,40 +12,7 @@
 </head>
 
 <body>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"
-    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-    crossorigin="anonymous"></script>
-
-    <script>
-
-        // City current weather
-        let cityName = "sapporo"
-        const  url = "https://cors-anywhere.herokuapp.com/api.openweathermap.org/"
-        const apiKey = "098c93e8d17b5848e68a154c5abf26ec"
-
-        let endPoint = url + "data/2.5/weather?q=" + cityName +  "&units=imperial" + "&appid=" + apiKey 
-        let endPoint2 = url + "data/2.5/forecast?q=" + cityName +  "&units=imperial" + "&appid=" + apiKey 
-
-        console.log(endPoint)
-        console.log(endPoint2)
-
-        $.ajax({
-            url: endPoint,
-            method: "GET",
-        }).then(function (response){
-            console.log(response);
-        })
-        $.ajax({
-            url: endPoint2,
-            method: "GET",
-        }).then(function (response){
-            console.log(response);
-        })
-
-    
-
-    </script>
-
+  
     <header class="bg-dark text-light" style="text-align: center;">
         <h1>Weather Dashboard</h1>
     </header>
@@ -76,7 +43,10 @@
                 <div class="row">
                     <div class="col-md-10">
                         <div class="card my-3">
-                            <h2 id="citySearch"></h2>
+                            <h2 id="citySearch">
+
+                            </h2>
+                           
                             <img id="crntIcon"><br>
                             <div id="crntDate"></div><br>
 
@@ -97,28 +67,26 @@
                     </div>
                 </div>
 
-              <div class="row">
-                  <h2>
-                      5 Day Forecast
-                  </h2><br>
-                  <div class="row" id="futureCast"></div>
-              </div>
+                <div class="row">
+                    <h2>
+                        5 Day Forecast
+                    </h2><br>
+                    <div class="row" id="futureCast"></div>
+                </div>
 
             </div>
-            
+
 
 
         </div>
 
     </div>
 
-    
+
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
         integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
         crossorigin="anonymous"></script>
@@ -126,6 +94,62 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+        <script>
+    
+            // City current weather
+            let cityName = "Sapporo"
+            const url = "https://api.openweathermap.org/"
+            const apiKey = "098c93e8d17b5848e68a154c5abf26ec"
+    
+            let endPoint = url + "data/2.5/weather?q=" + cityName + "&units=imperial" + "&appid=" + apiKey
+            let endPoint2 = url + "data/2.5/forecast?q=" + cityName + "&units=imperial" + "&appid=" + apiKey
+            let endpoint3 = url + "data/2.5/uvi?lat="
+            // let lon = response.coord.lon;
+            // let lon = $ajax({
+            //     url
+            // })
+            // let lat = response.coord.lat; 
+    
+            console.log(endPoint)
+            console.log(endPoint2)
+    
+            $.ajax({
+                url: endPoint,
+                method: "GET",
+            })
+                .then(function (response) {
+                    let span = $("<span>").text(response.name)
+                     let currentDate = moment(response.dt, "X").format(" (MM/DD/YYYY)")
+                     $("#citySearch").append(span, currentDate) 
+
+                    console.log(response);
+                    console.log(response.coord.lon)
+                    console.log(response.coord.lat)
+                    console.log(endpoint3 + response.coord.lat.toString() + "&lon=" + response.coord.lon + "&appid=" + apiKey)
+                    $.ajax({
+                        url: endpoint3 + response.coord.lat.toString()+ "&lon=" + response.coord.lon.toString() + "&appid=" + apiKey,
+                        method: "GET"
+                    })
+                        .then(function (uvResponse) {
+                            console.log(uvResponse)
+                        })
+    
+                })
+    
+    
+            $.ajax({
+                url: endPoint2,
+                method: "GET",
+            }).then(function (response) {
+                console.log(response);
+            })
+    
+    
+    
+        </script>
+    
 </body>
 
 </html>
