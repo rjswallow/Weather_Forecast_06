@@ -17,13 +17,17 @@
     crossorigin="anonymous"></script>
 
     <script>
+
+        // City current weather
         let cityName = "sapporo"
         const  url = "https://cors-anywhere.herokuapp.com/api.openweathermap.org/"
         const apiKey = "098c93e8d17b5848e68a154c5abf26ec"
 
         let endPoint = url + "data/2.5/weather?q=" + cityName +  "&units=imperial" + "&appid=" + apiKey 
+        let endPoint2 = url + "data/2.5/forecast?q=" + cityName +  "&units=imperial" + "&appid=" + apiKey 
 
         console.log(endPoint)
+        console.log(endPoint2)
 
         $.ajax({
             url: endPoint,
@@ -31,15 +35,6 @@
         }).then(function (response){
             console.log(response);
         })
-
-        let cityForecast = "sapporo"
-        const  url = "https://cors-anywhere.herokuapp.com/api.openweathermap.org/"
-        const apiKey = "098c93e8d17b5848e68a154c5abf26ec"
-
-        let endPoint2 = url + "data/2.5/forecast?q=" + cityName +  "&units=imperial" + "&appid=" + apiKey 
-
-        console.log(endPoint2)
-
         $.ajax({
             url: endPoint2,
             method: "GET",
@@ -47,6 +42,7 @@
             console.log(response);
         })
 
+    
 
     </script>
 
