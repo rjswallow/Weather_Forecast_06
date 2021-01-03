@@ -50,16 +50,16 @@
                             <img id="crntIcon"><br>
                             <div id="crntDate"></div><br>
 
-                            <label for="crntTemp">Current Temp:</label>
+                            <label for="crntTemp"></label>
                             <div style="display: inline" id="crntTemp"></div><br>
 
-                            <label for="crntHumidity">Current Humidity:</label>
+                            <label for="crntHumidity"></label>
                             <div style="display: inline" id="crntHumidity"></div><br>
 
-                            <label for="crntWind">Current Wind Speed:</label>
+                            <label for="crntWind"></label>
                             <div style="display: inline" id="crntWind"></div><br>
 
-                            <label for="crntIndex">Current UV Index:</label>
+                            <label for="crntIndex"></label>
                             <div style="display: inline" id="crntIndex"></div><br>
 
 
@@ -106,37 +106,57 @@
             let endPoint = url + "data/2.5/weather?q=" + cityName + "&units=imperial" + "&appid=" + apiKey
             let endPoint2 = url + "data/2.5/forecast?q=" + cityName + "&units=imperial" + "&appid=" + apiKey
             let endpoint3 = url + "data/2.5/uvi?lat="
-            // let lon = response.coord.lon;
-            // let lon = $ajax({
-            //     url
-            // })
-            // let lat = response.coord.lat; 
+             
     
             console.log(endPoint)
             console.log(endPoint2)
     
             $.ajax({
-                url: endPoint,
-                method: "GET",
-            })
-                .then(function (response) {
-                    let span = $("<span>").text(response.name)
-                     let currentDate = moment(response.dt, "X").format(" (MM/DD/YYYY)")
-                     $("#citySearch").append(span, currentDate) 
-
-                    console.log(response);
-                    console.log(response.coord.lon)
-                    console.log(response.coord.lat)
-                    console.log(endpoint3 + response.coord.lat.toString() + "&lon=" + response.coord.lon + "&appid=" + apiKey)
-                    $.ajax({
-                        url: endpoint3 + response.coord.lat.toString()+ "&lon=" + response.coord.lon.toString() + "&appid=" + apiKey,
-                        method: "GET"
-                    })
-                        .then(function (uvResponse) {
-                            console.log(uvResponse)
-                        })
-    
+                    url: endPoint,
+                    method: "GET",
                 })
+                    .then(function (response) {
+
+                        // display current city and date
+                        let span = $("<span>").text(response.name)
+                        let currentDate = moment(response.dt, "X").format(" (MM/DD/YYYY)")
+                        $("#citySearch").append(span, currentDate)
+
+                        //  display current temp
+                        let temp = $("<span>").text("Current Temp: " + response.main.temp + "ºF")
+                        $("#crntTemp").append(temp)
+
+                        // display current humidity  
+                        let humidity = $("<span>").text("Current Humidity: " + response.main.humidity + "%")
+                        $("#crntHumidity").append(humidity)
+
+                        // display current wind speed
+                        let wind = $("<span>").text("Current Wind Speed: " + response.wind.speed + " mph")
+                        $("#crntWind").append(wind)
+
+                        console.log(response);
+                        console.log("temp " + response.main.temp)
+                        console.log("humidity " + response.main.humidity)
+                        console.log("wind " + response.wind.speed)
+                        console.log(response.coord.lon)
+                        console.log(response.coord.lat)
+                        console.log(endpoint3 + response.coord.lat.toString() + "&lon=" + response.coord.lon + "&appid=" + apiKey)
+                        
+                        // call for UV Index
+                        $.ajax({
+                            url: endpoint3 + response.coord.lat.toString() + "&lon=" + response.coord.lon.toString() + "&appid=" + apiKey,
+                            method: "GET"
+                        })
+                            .then(function (uvResponse) {
+                                let uvIndex =  $("<span>").text("Current UV Index: " + uvResponse.value)
+                                    $("#crntIndex").append(uvIndex)
+
+                                console.log(uvResponse)
+                                console.log(uvResponse.value)
+                                
+                            })
+
+                    })
     
     
             $.ajax({
