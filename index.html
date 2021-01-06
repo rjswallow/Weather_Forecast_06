@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  
+
     <header class="bg-dark text-light" style="text-align: center;">
         <h1>Weather Dashboard</h1>
     </header>
@@ -46,7 +46,7 @@
                             <h2 id="citySearch">
 
                             </h2>
-                           
+
                             <img id="crntIcon"><br>
                             <div id="crntDate"></div><br>
 
@@ -67,12 +67,69 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <h2>
-                        5 Day Forecast
-                    </h2><br>
-                    <div class="row" id="futureCast"></div>
+
+
+                <div class="row" id="futureCast">
+
+                    <div class="col-sm-12">
+                        <h2>
+                            5 Day Forecast
+                        </h2><br>
+
+                        <div class="card-deck">
+
+                            <!-- <div class="card">
+                                 
+                                  <div class="card-body">
+                                    <h5 class="card-title">01/08/20</h5>
+                                    <img src="http://openweathermap.org/img/w/03d.png">
+                                    <p>Temp: 20</p>
+                                    <p>Humidity: 80%</p>
+                                  
+                                  </div>
+                                </div>
+                                <div class="card">
+                                 
+                                  <div class="card-body">
+                                    <h5 class="card-title">01/09/20</h5>
+                                    <img src="http://openweathermap.org/img/w/03d.png">
+                                    <p>Temp: 20</p>
+                                    <p>Humidity: 80%</p>
+                                  
+                                  </div>
+                                </div>
+                                <div class="card">
+                                   
+                                    <div class="card-body">
+                                      <h5 class="card-title">01/10/20</h5>
+                                      <img src="http://openweathermap.org/img/w/03d.png">
+                                      <p>Temp: 20</p>
+                                      <p>Humidity: 80%</p>
+                                      
+                                    </div>
+                                  </div>
+                                  <div class="card">
+                                   
+                                    <div class="card-body">
+                                      <h5 class="card-title">01/07/20</h5>
+                                      <img src="http://openweathermap.org/img/w/03d.png">
+                                      <p>Temp: 20</p>
+                                    <p>Humidity: 80%</p>
+                                      
+                                    </div>
+                                  </div>
+                              -->
+
+                        </div>
+
+
+                    </div>
+
+
+
+
                 </div>
+
 
             </div>
 
@@ -94,82 +151,151 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
-        <script>
-    
-            // City current weather
-            let cityName = "Sapporo"
-            const url = "https://api.openweathermap.org/"
-            const apiKey = "098c93e8d17b5848e68a154c5abf26ec"
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+        integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+        crossorigin="anonymous"></script>
+
+
+    <script>
+
+
+
+
+        // City current weather
+
+        const url = "https://api.openweathermap.org/"
+        const apiKey = "098c93e8d17b5848e68a154c5abf26ec"
+
+
+
+
+
+        $("#searchBtn").on("click", function () {
+            let cityName = $("#search-term").val()
+            $("#citySearch").empty()
+            $("#crntTemp").empty()
+            $("#crntHumidity").empty()
+            $("#crntHumidity").empty()
+            $("#crntWind").empty()
+            $("#crntIndex").empty()
+            displayWeather(cityName)
+        })
+
+
+        function displayWeather(cityName) {
+
             let endPoint = url + "data/2.5/weather?q=" + cityName + "&units=imperial" + "&appid=" + apiKey
             let endPoint2 = url + "data/2.5/forecast?q=" + cityName + "&units=imperial" + "&appid=" + apiKey
             let endpoint3 = url + "data/2.5/uvi?lat="
-             
-    
-            console.log(endPoint)
-            console.log(endPoint2)
-    
             $.ajax({
-                    url: endPoint,
-                    method: "GET",
-                })
-                    .then(function (response) {
+                url: endPoint,
+                method: "GET",
+            })
+                .then(function (response) {
 
-                        // display current city and date
-                        let span = $("<span>").text(response.name)
-                        let currentDate = moment(response.dt, "X").format(" (MM/DD/YYYY)")
-                        $("#citySearch").append(span, currentDate)
+                    // display current city and date
+                    let span = $("<span>").text(response.name)
+                    let currentDate = moment(response.dt, "X").format(" (MM/DD/YYYY)")
 
-                        //  display current temp
-                        let temp = $("<span>").text("Current Temp: " + response.main.temp + "ºF")
-                        $("#crntTemp").append(temp)
+                    var iconcode = response.weather[0].icon
+                    var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
 
-                        // display current humidity  
-                        let humidity = $("<span>").text("Current Humidity: " + response.main.humidity + "%")
-                        $("#crntHumidity").append(humidity)
+                    var imageIcon = $("<img>").attr("src", iconurl)
 
-                        // display current wind speed
-                        let wind = $("<span>").text("Current Wind Speed: " + response.wind.speed + " mph")
-                        $("#crntWind").append(wind)
+                    $("#citySearch").append(span, currentDate, imageIcon)
 
-                        console.log(response);
-                        console.log("temp " + response.main.temp)
-                        console.log("humidity " + response.main.humidity)
-                        console.log("wind " + response.wind.speed)
-                        console.log(response.coord.lon)
-                        console.log(response.coord.lat)
-                        console.log(endpoint3 + response.coord.lat.toString() + "&lon=" + response.coord.lon + "&appid=" + apiKey)
-                        
-                        // call for UV Index
-                        $.ajax({
-                            url: endpoint3 + response.coord.lat.toString() + "&lon=" + response.coord.lon.toString() + "&appid=" + apiKey,
-                            method: "GET"
-                        })
-                            .then(function (uvResponse) {
-                                let uvIndex =  $("<span>").text("Current UV Index: " + uvResponse.value)
-                                    $("#crntIndex").append(uvIndex)
+                    //  display current temp
+                    let temp = $("<span>").text("Current Temp: " + response.main.temp + "ºF")
+                    $("#crntTemp").append(temp)
 
-                                console.log(uvResponse)
-                                console.log(uvResponse.value)
-                                
-                            })
+                    // display current humidity  
+                    let humidity = $("<span>").text("Current Humidity: " + response.main.humidity + "%")
+                    $("#crntHumidity").append(humidity)
 
+                    // display current wind speed
+                    let wind = $("<span>").text("Current Wind Speed: " + response.wind.speed + " mph")
+                    $("#crntWind").append(wind)
+
+                    console.log(response);
+                    console.log("temp " + response.main.temp)
+                    console.log("humidity " + response.main.humidity)
+                    console.log("wind " + response.wind.speed)
+                    console.log(response.coord.lon)
+                    console.log(response.coord.lat)
+                    console.log(endpoint3 + response.coord.lat.toString() + "&lon=" + response.coord.lon + "&appid=" + apiKey)
+
+                    // call for UV Index
+                    $.ajax({
+                        url: endpoint3 + response.coord.lat.toString() + "&lon=" + response.coord.lon.toString() + "&appid=" + apiKey,
+                        method: "GET"
                     })
-    
-    
+                        .then(function (uvResponse) {
+
+                            // display uv index
+                            let uvIndex = $("<span>").text("Current UV Index: " + uvResponse.value)
+                            $("#crntIndex").append(uvIndex)
+
+                            console.log(uvResponse)
+                            console.log(uvResponse.value)
+
+                        })
+
+                })
+
+
             $.ajax({
                 url: endPoint2,
                 method: "GET",
             }).then(function (response) {
+                console.log(response)
+                $(".card-deck").empty()
+                for (let i = 0; i < response.list.length; i++) {
+                    if (response.list[i].dt_txt.includes("12:00:00")) {
+
+
+                        var iconcode = response.list[i].weather[0].icon
+                        var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
+
+                        var temp5 = response.list[i].main.temp
+                        var humidity5 = response.list[i].main.humidity
+
+
+
+
+                        let futureDate = moment(response.list[i].dt, "X").format(" MM/DD/YYYY")
+                        $(".card-deck").append(`
+                            <div class="card">
+                                 
+                                 <div class="card-body">
+                                   <h5 class="card-title">${futureDate}</h5>
+                                   <img src="${iconurl}">
+                                   <p>Temp: ${temp5} </p>
+                                   <p>Humidity: ${humidity5}</p>
+                                  
+                                 </div>
+                               </div>
+                               
+                               `)
+                    }
+
+                }
+
+
+
+
                 console.log(response);
+                console.log(response.list[0])
             })
-    
-    
-    
-        </script>
-    
+
+
+        }
+
+
+
+
+    </script>
+
 </body>
 
 </html>
